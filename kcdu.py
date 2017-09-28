@@ -9,7 +9,6 @@ from jinja2 import Template
 import csv
 from time import sleep
 
-## Future-- add ncurses support to evenly space columns
 
 def get_creds():
 	# TODO: check permisions on file and fail if not set to 600
@@ -38,15 +37,6 @@ def create_cd(col_name, type, display_name):
 	data = json.loads(t.render(column = col_name, data_type = type, pretty_name = display_name))	
 	response = requests.post(url, headers=headers, data=data)
 	if response.status_code != 201:
-# 		if (response.json()['error'] == "name: Column name already in use"):
-# 			response = raw_input("Selected column name is already in use. Would you like to update the existing column? [Y/N] ").lower()
-# 			if response == 'y':
-# 				cd_dict = get_cds()
-# 				for id, (column, display) in cd_dict.iteritems():
-# 					if 'Source Continent' in display:
-# 						print("Found the following custom dimensions {}").format(id)
-# 					else:
-# 						continue
 		print("Unable to create custom dimension column. Exiting.")
 		print("Status code: {}").format(response.status_code)
 		print("Error message: {}").format(response.json()['error'])
@@ -112,7 +102,6 @@ def upload_cds(mydict, direction, id):
 						"mac",
 						"country"]
 	t = Template(json_template)
-# 	print("instantiated template")
 	if match.lower() in permitted_fields:
 		print("Uploading custom dimensions "),
 		for k, v in mydict[0].iteritems():
@@ -149,9 +138,7 @@ if __name__ == "__main__":
 	parser.add_argument('-d', help='Matching direction. May be either \'src\' or \'dst\'')
 	
 	args = parser.parse_args()
-	
-	# Load variables
-	
+		
 	if args.email:
 		email = args.email
 	if args.api:
@@ -163,9 +150,7 @@ if __name__ == "__main__":
 		exit("Could not find .kauth file and credentials were not supplied as arguments.")
 		
 	headers = {"X-CH-Auth-API-Token": api, "X-CH-Auth-Email": email}
-	
-	# do the stuff
-	
+		
 	if args.list:
 		cd_dict = get_cds()
 		print("ID\t\tColumn Name\t\tDisplay Name")
@@ -194,8 +179,7 @@ if __name__ == "__main__":
 			if str(cd_id) in str(args.u):
 				id = str(cd_id)
 				print("Updating column {}. ").format(id),
-# 			else:
-# 				exit("Couldn't find a column to update")
+
 		
 	if args.i:
 		# make sure file exists
